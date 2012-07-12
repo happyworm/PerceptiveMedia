@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>BBC R&amp;D: Perceptive Media &#8220;Breaking Out&#8221;</title>
+	<link href="assets/css/perceptive.media.css" rel="stylesheet" type="text/css" />
+	<script src="assets/js/jquery/jquery-1.7.2.min.js"></script>
+	<script src="assets/js/jplayer/jquery.jplayer.js"></script>
+	<script src="assets/js/transform2d/jquery.transform2d.js"></script>
+	<script src="assets/js/chromeexperiments/dat.gui.min.js"></script>
+	<script src="assets/js/date.format/date.format.js"></script>
+	<script src="assets/js/perceptive.media/perceptive.media.js"></script>
+	<script src="assets/js/perceptive.media/loading.music.js"></script>
+	<script src="assets/js/perceptive.media/breaking.out.js"></script>
+	<script src="assets/js/perceptive.media/geo.city.js"></script>
+	<script src="assets/js/perceptive.media/social.network.js"></script>
+	<script src="assets/js/perceptive.media/doc.ready.js"></script>
+
+	<!--[if (gt IE 9)|!(IE)]><!-->
+		<script type="text/javascript" src="http://www.facebook.com/profile.php?id=625048063" onload="setSocialNetworks('facebook', true)" onerror="setSocialNetworks('facebook', false)" async="async"></script>
+		<script type="text/javascript" src="https://twitter.com/account/use_phx?setting=false&amp;format=text" onload="setSocialNetworks('twitter', false)" onerror="setSocialNetworks('twitter', true)" async="async"></script>
+		<script type="text/javascript" src="http://digg.com/settings" onload="setSocialNetworks('digg', true)" onerror="setSocialNetworks('digg', false)" async="async"></script> 
+	<!--<![endif]-->
+</head>
+<body>
+	<div id="fb-root"></div>
+
+	<div class="toppadding"></div>
+	<div class="container">
+		<header>
+			<h1>Breaking Out</h1>
+			<p class="lead">
+				A BBC Research and Development experiment into new editorial formats
+				<a id="js-subtitle-button-on" class="subtitle-button">Show Subtitles</a>
+				<a id="js-subtitle-button-off" class="subtitle-button subtitle-button-hidden">Hide Subtitles</a>
+			</p>
+		</header>
+		<div id="js-stage" class="container">
+			<div id="outsideLiftBackground">
+				<img id="outsideLiftBackgroundImage" src="./assets/img/audioplay_slide1.png"/>
+
+				<div class="text-panel-container">
+
+
+					<div id="js-page-entry" class="text-panel text-panel-default">
+						<div class="welcome-section section-chrome">
+							This audio drama performs best on <a href="http://www.google.com/chrome/" target="_blank">Chrome</a> using the Web Audio API,
+							but should also work in
+							<a href="http://www.firefox.com/" target="_blank">Firefox</a>,
+							<a href="http://www.opera.com/download/" target="_blank">Opera</a> and
+							<a href="http://www.apple.com/safari/download/" target="_blank">Safari</a>
+							through a fallback solution.
+						</div>
+						<div class="welcome-section section-sound">
+							Before you click the start button make sure you have loudspeakers or headphones plugged in.
+						</div>
+						<div class="welcome-section section-problem">
+							If you are experiencing performance issues it may be worth closing any other applications that you are not using.
+						</div>
+						<div class="welcome-section section-geolocation">
+							Best experienced from the UK.<br />
+							You can read more about this experiment on the<br />
+							<a href="http://www.bbc.co.uk/blogs/researchanddevelopment/" target="_blank">BBC R&amp;D blog</a>.
+						</div>
+					</div>
+					<div id="js-page-intro" class="text-panel">
+						<p>
+							Thank you for connecting to this BBC Research and Development experiment into the new editorial formats.
+						</p>
+						<p>
+							What follows is a short audio drama entitled &#8220;Breaking Out&#8221;.
+						</p>
+						<p>
+							After listening we hope you will provide us with some feedback.
+						</p>
+					</div>
+					<div id="js-page-credits" class="text-panel">
+						<table class="credits">
+							<tr>
+								<td class="position">Writer:</td>
+								<td>Sarah Glenister</td>
+							</tr>
+							<tr>
+								<td class="position">Harriet:</td>
+								<td>Maeve Larkin</td>
+							</tr>
+							<tr>
+								<td class="position">Lift operator:</td>
+								<td>Anthony Churnside</td>
+							</tr>
+							<tr>
+								<td class="position">Producers:</td>
+								<td>Anthony Churnside and Ian Forrester</td>
+							</tr>
+							<tr>
+								<td class="position">Web Audio Developers:</td>
+								<td>
+									<a href="http://happyworm.com/" target="_blank">Happyworm Ltd</a><br />
+									Mark Boas and Mark Panaghiston
+								</td>
+							</tr>
+							<tr>
+								<td class="position">Web Audio Library:</td>
+								<td><a href="http://jplayer.org/" target="_blank">jPlayer</a></td>
+							</tr>
+							<tr>
+								<td class="position">Website Design:</td>
+								<td>Yameen Rasul and Matthew Brooks</td>
+							</tr>
+							<tr>
+								<td class="position">Illustrations:</td>
+								<td><a href="http://angiechan.com/" target="_blank">Angie Chan</a></td>
+							</tr>
+							<tr>
+								<td class="position">With special thanks:</td>
+								<td>Sharon Sephton, Henry R Swindell, Maxine Glancy, Usman Mullan, Elizabeth Valentine and the BBC Writers Room</td>
+							</tr>
+						</table>
+					</div>
+
+					<div id="startBanner" class="flag-banner">
+						<a title="Start">Click Here to Start</a>
+					</div>
+					<div id="tryAnywayBanner" class="flag-banner">
+						<a title="Start">Try It Anyway?</a>
+					</div>
+					<div id="endBanner" class="flag-banner">
+						<a href="https://bbcarp.org.uk/survey/index.php?sid=92924&amp;lang=en" target="_blank">Give Us Feedback</a>
+					</div>
+
+				</div>
+				<div id="lift-dial-handle" class="lift-dial-hand" style="display:none;width:128px;height:20px"></div>
+				<div id="voiceLeds"></div>
+				<div id="arrowDownLeds"><img id="arrowDownLedsImage" src="./assets/img/audioplay_slide3_arrow.png" style="display:none"/></div>
+			</div>
+		</div>
+		<footer>
+			<div class="social-container">
+				<div class="social-button social-facebook">
+					<div class="fb-like" data-send="false" data-layout="button_count" data-show-faces="false" data-font="arial"></div>
+				</div>
+				<div class="social-button social-twitter">
+					<a href="https://twitter.com/share" class="twitter-share-button" data-via="BBCRD" data-hashtags="perceptivemedia">Tweet</a>
+				</div>
+			</div>
+
+			<div class="bbc-rd-branding">
+				<img id="bbcBlocksOrg" src="./assets/img/bbc_logo_76x22px.png"/>
+				<a href="http://www.bbc.co.uk/rd/" class="r-and-d" target="_blank">Research &amp; Development</a><br />
+				<a href="http://www.bbc.co.uk/" class="copyright" target="_blank">BBC &copy; 2012</a>
+			</div>
+		</footer>
+		<div  id="js-subtitles" class="subtitles">
+			<div class="subtitle-container sub-harriet"><span id="js-sub-harriet" class="subtitle"></span></div>
+			<div class="subtitle-container sub-lift"><span id="js-sub-lift" class="subtitle"></span></div>
+			<div class="subtitle-container sub-concierge"><span id="js-sub-concierge" class="subtitle"></span></div>
+			<div class="subtitle-container sub-sfx"><span id="js-sub-sfx" class="subtitle"></span></div>
+		</div>
+		<div id="js-easter-bunny" class="easter-bunny">
+			<div id="js-console" class="console"></div>
+			<div class="extra-info-container">
+				<div class="extra-info">
+					UK City: <span id="js-geo-city"></span><br />
+					Social: <span id="js-social-networks"></span>
+				</div>
+			</div>
+		</div>
+		<div class="easter-egg easter-egg-hidden">
+			<span id="js-easter-egg-msg">You've found the hidden Easter Egg &rarr;</span>
+			<a id="js-easter-egg" title="easter egg">&bull;</a>
+		</div>
+	</div>
+	<div id="jplayerIntro"></div>
+</body>
+<script>
+(function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0];
+	if (d.getElementById(id)) return;
+	js = d.createElement(s); js.id = id;
+	js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+	fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+</script>
+</html>
