@@ -11,8 +11,8 @@
  * Developed By: Happyworm Ltd http://www.happyworm.com
  * Author: Mark J Panaghiston @thepag
  * R&D: Mark Boas @maboa
- * Version: 1.0.0
- * Date: 2nd July 2012
+ * Version: 1.0.1
+ * Date: 12th July 2012
  *
  * Script Title: Breaking out
  * Script Author: Sarah Glenister @sarahglenister
@@ -266,14 +266,16 @@ body{
 }
 .social-button {
 	float:left;
+	margin-right:15px;
 }
 .social-facebook {
 	top:-5px;
-	margin-right:15px;
 }
-.social-twitter {
+.social-twitter,
+.social-googleplus {
 	top:0;
 }
+
 .clearboth {
 	clear:both;
 }
