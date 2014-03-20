@@ -821,6 +821,7 @@ var PerceptiveMedia; // Global
 			this.tOffset = options.tOffset || 0;
 
 			this.forceDuration = options.forceDuration;
+			this.noDuration = options.noDuration; // To avoid the multiple noteOff
 
 			this.time = options.time ? options.time : 0; // The absolute start time of this asset. Calculated by relative timing system.
 
@@ -1082,9 +1083,11 @@ var PerceptiveMedia; // Global
 
 								if(self.loop) {
 									self.WebAudioAPI.source.loop = true;
-									// self.WebAudioAPI.source.noteOff(self.context.currentTime + relTime + self.tEnd);
-									self.WebAudioAPI.source.noteOff(self.context.currentTime + relTimeEnd);
-									// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : loop noteOff(' + relTimeEnd + ') : asset.text: ' + self.text);
+									if(!self.noDuration) {
+										// self.WebAudioAPI.source.noteOff(self.context.currentTime + relTime + self.tEnd);
+										self.WebAudioAPI.source.noteOff(self.context.currentTime + relTimeEnd);
+										// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : loop noteOff(' + relTimeEnd + ') : asset.text: ' + self.text);
+									}
 								}
 
 								self.stop = function() {

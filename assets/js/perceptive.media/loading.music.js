@@ -34,6 +34,7 @@ var initLoadingMusic = (function($, undefined) {
 				url: media_root + 'music/#FMT#/music-loop-x2.#FMT#',
 				loop: true,
 				duration: 3600, // Number.POSITIVE_INFINITY,
+				noDuration: true, // To fix the noteOff bug
 				rel: 'start', // Otherwise the timeGap is applied here.
 				filterStyle: 'muffled'
 			}
