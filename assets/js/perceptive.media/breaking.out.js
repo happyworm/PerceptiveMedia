@@ -127,6 +127,7 @@ var initBreakingOut = (function($, undefined) {
 
 				duration: 42, // Otional: Specify the duration of the media to play. Can be used to make loops play automatically for T time. Normally the duration is auto read in from audio.
 				forceDuration: true, // Optional: (Default: false) Causes the audio to stop at the duration time.
+				noduration: true, // Optional: (Default: false) Use with a duration on loops to avoid multi noteOff() bug
 
 				fader: [
 					{
