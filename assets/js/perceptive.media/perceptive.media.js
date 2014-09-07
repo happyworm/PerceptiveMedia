@@ -104,8 +104,8 @@ var PerceptiveMedia; // Global
 			};
 
 			this.destination = {
-				foreground: this.context.createGainNode(),
-				background: this.context.createGainNode()
+				foreground: this.context.createGain(),
+				background: this.context.createGain()
 			};
 			this.destination.foreground.connect(this.context.destination);
 			this.destination.background.connect(this.context.destination);
@@ -364,7 +364,7 @@ var PerceptiveMedia; // Global
 					// Can only assume that the Web Audio API figures that there is no sound to process as it never connects to the destination.
 					// I see that the Web Audio API docs does have a note saying that the RealtimeAnalyserNode may be left unconnected, but this cannot have been implemented yet.
 					// Using a gain node with zero gain to connect it to desination while not being audiable.
-					this.analyserDestination[track] = this.context.createGainNode();
+					this.analyserDestination[track] = this.context.createGain();
 					this.analyserDestination[track].gain.value = 0;
 					this.analyserDestination[track].connect(this.context.destination);
 					this.analyser[track].connect(this.analyserDestination[track]); // You need a destination or the analyser does nothing!
@@ -821,7 +821,7 @@ var PerceptiveMedia; // Global
 			this.tOffset = options.tOffset || 0;
 
 			this.forceDuration = options.forceDuration;
-			this.noDuration = options.noDuration; // To avoid the multiple noteOff
+			this.noDuration = options.noDuration; // To avoid the multiple stop
 
 			this.time = options.time ? options.time : 0; // The absolute start time of this asset. Calculated by relative timing system.
 
@@ -947,8 +947,8 @@ var PerceptiveMedia; // Global
 
 					// Destination is not used by effects directly, the inputs to the effect require the different depth staging.
 					self.destination = {
-						foreground: self.context.createGainNode(),
-						background: self.context.createGainNode()
+						foreground: self.context.createGain(),
+						background: self.context.createGain()
 					};
 					self.destination.foreground.connect(self.convolver);
 					self.destination.background.connect(self.convolver);
@@ -997,13 +997,13 @@ var PerceptiveMedia; // Global
 
 							self.WebAudioAPI.source.connect(self.analyser[self.track]);
 
-							self.WebAudioAPI.gainNode1 = self.context.createGainNode();
+							self.WebAudioAPI.gainNode1 = self.context.createGain();
 							// self.WebAudioAPI.gainNode1.connect(self.context.destination);
 							self.WebAudioAPI.gainNode1.connect(self.destination[self.depth]);
 							self.WebAudioAPI.source.connect(self.WebAudioAPI.gainNode1);
 
 							if(self.effectAsset) {
-								self.WebAudioAPI.gainNode2 = self.context.createGainNode();
+								self.WebAudioAPI.gainNode2 = self.context.createGain();
 								// self.WebAudioAPI.gainNode2.connect(self.effectAsset.convolver);
 								self.WebAudioAPI.gainNode2.connect(self.effectAsset.destination[self.depth]);
 								self.WebAudioAPI.source.connect(self.WebAudioAPI.gainNode2);
@@ -1014,13 +1014,13 @@ var PerceptiveMedia; // Global
 								// filter config set in applyGains()
 								self.WebAudioAPI.source.connect(self.WebAudioAPI.filter);
 
-								self.WebAudioAPI.gainNode3 = self.context.createGainNode();
+								self.WebAudioAPI.gainNode3 = self.context.createGain();
 								// self.WebAudioAPI.gainNode3.connect(self.context.destination);
 								self.WebAudioAPI.gainNode3.connect(self.destination[self.depth]);
 								self.WebAudioAPI.filter.connect(self.WebAudioAPI.gainNode3);
 
 								if(self.effectAsset) {
-									self.WebAudioAPI.gainNode4 = self.context.createGainNode();
+									self.WebAudioAPI.gainNode4 = self.context.createGain();
 									// self.WebAudioAPI.gainNode4.connect(self.effectAsset.convolver);
 									self.WebAudioAPI.gainNode4.connect(self.effectAsset.destination[self.depth]);
 									self.WebAudioAPI.filter.connect(self.WebAudioAPI.gainNode4);
@@ -1062,7 +1062,7 @@ var PerceptiveMedia; // Global
 
 							} else {
 								if(relTime >= 0) {
-									self.WebAudioAPI.source.noteOn(self.context.currentTime + relTime);
+									self.WebAudioAPI.source.start(self.context.currentTime + relTime);
 									playID = setTimeout(function() {
 										$(self).trigger(PerceptiveMedia.prototype.event.playasset);
 									}, relTime * 1000);
@@ -1084,16 +1084,16 @@ var PerceptiveMedia; // Global
 								if(self.loop) {
 									self.WebAudioAPI.source.loop = true;
 									if(!self.noDuration) {
-										// self.WebAudioAPI.source.noteOff(self.context.currentTime + relTime + self.tEnd);
-										self.WebAudioAPI.source.noteOff(self.context.currentTime + relTimeEnd);
-										// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : loop noteOff(' + relTimeEnd + ') : asset.text: ' + self.text);
+										// self.WebAudioAPI.source.stop(self.context.currentTime + relTime + self.tEnd);
+										self.WebAudioAPI.source.stop(self.context.currentTime + relTimeEnd);
+										// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : loop stop(' + relTimeEnd + ') : asset.text: ' + self.text);
 									}
 								}
 
 								self.stop = function() {
 									clearTimeout(playID);
 									self.playing = false;
-									self.WebAudioAPI.source.noteOff(0);
+									self.WebAudioAPI.source.stop(0);
 									// self.releaseWebAudioApi();
 									self.stop = function() {};
 								};
@@ -1101,7 +1101,7 @@ var PerceptiveMedia; // Global
 
 							self.applyGains(time);
 
-							// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : noteOn()');
+							// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : start()');
 						} else {
 							// Give the event, as it was effectively played in the past when compared to this new start time.
 							$(self).trigger(PerceptiveMedia.prototype.event.playasset);
@@ -1118,7 +1118,7 @@ var PerceptiveMedia; // Global
 				if(this.context) {
 					var grainOffset = this.loop ? (time - this.time) % (this.buffer.duration / 2) : -relTime,
 					grainRemaining = this.loop ? (this.buffer.duration / 2) - grainOffset : this.buffer.duration - grainOffset;
-					this.WebAudioAPI.source.noteOff(this.context.currentTime + grainRemaining);
+					this.WebAudioAPI.source.stop(this.context.currentTime + grainRemaining);
 					return grainRemaining;
 				} else {
 					this.myPlayer.jPlayer("stop");
