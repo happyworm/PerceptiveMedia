@@ -21,7 +21,7 @@
 	/*
 	 * Set the URL of the page or file to download.
 	 */
-	curl_setopt($ch, CURLOPT_URL, 'http://www.filmdates.co.uk/rss/out_this_week.php');
+	curl_setopt($ch, CURLOPT_URL, 'http://www.filmdates.co.uk/rss/out-this-week/');
 
 	/*
 	 * Ask cURL to return the contents in a variable instead of simply echoing them to  the browser.
