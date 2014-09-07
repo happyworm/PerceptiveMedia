@@ -11,8 +11,8 @@
  * Developed By: Happyworm Ltd http://www.happyworm.com
  * Author: Mark J Panaghiston @thepag
  * R&D: Mark Boas @maboa
- * Version: 1.0.0
- * Date: 2nd July 2012
+ * Version: 1.0.1
+ * Date: 7th September 2014
  */
 
 /* Code verified using http://www.jshint.com/ */
