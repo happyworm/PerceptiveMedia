@@ -21,7 +21,8 @@
 	/*
 	 * Set the URL of the page or file to download.
 	 */
-	curl_setopt($ch, CURLOPT_URL, 'http://downloads.bbc.co.uk/podcasts/radio/newspod/rss.xml');
+	// Obsolete RSS: http://downloads.bbc.co.uk/podcasts/radio/newspod/rss.xml
+	curl_setopt($ch, CURLOPT_URL, 'http://downloads.bbc.co.uk/podcasts/radio4/today/rss.xml');
 
 	/*
 	 * Ask cURL to return the contents in a variable instead of simply echoing them to  the browser.
