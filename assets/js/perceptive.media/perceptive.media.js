@@ -986,7 +986,9 @@ var PerceptiveMedia; // Global
 									var audioElem = self.myPlayer.data('jPlayer').htmlElement.audio;
 									// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : self.myPlayer = ' + self.myPlayer);
 									// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : jPlayer.htmlElement.audio.id = ' + audioElem.id);
-									self.WebAudioAPI.source = self.context.createMediaElementSource(audioElem);
+
+									// Disabled Web Audio API for the podcast
+									// self.WebAudioAPI.source = self.context.createMediaElementSource(audioElem);
 								} else {
 									// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : jPlayer audio source setup previously');
 								}
@@ -995,21 +997,30 @@ var PerceptiveMedia; // Global
 								self.WebAudioAPI.source.buffer = self.buffer;
 							}
 
-							self.WebAudioAPI.source.connect(self.analyser[self.track]);
+							// Disabled Web Audio API for the podcast (Added if)
+							if(!self.mp3) {
+								self.WebAudioAPI.source.connect(self.analyser[self.track]);
+							}
 
 							self.WebAudioAPI.gainNode1 = self.context.createGain();
 							// self.WebAudioAPI.gainNode1.connect(self.context.destination);
 							self.WebAudioAPI.gainNode1.connect(self.destination[self.depth]);
-							self.WebAudioAPI.source.connect(self.WebAudioAPI.gainNode1);
 
-							if(self.effectAsset) {
+							// Disabled Web Audio API for the podcast (Added if)
+							if(!self.mp3) {
+								self.WebAudioAPI.source.connect(self.WebAudioAPI.gainNode1);
+							}
+
+							// Disabled Web Audio API for the podcast (Added mp3 clause)
+							if(self.effectAsset && !self.mp3) {
 								self.WebAudioAPI.gainNode2 = self.context.createGain();
 								// self.WebAudioAPI.gainNode2.connect(self.effectAsset.convolver);
 								self.WebAudioAPI.gainNode2.connect(self.effectAsset.destination[self.depth]);
 								self.WebAudioAPI.source.connect(self.WebAudioAPI.gainNode2);
 							}
 
-							if(self.filter) {
+							// Disabled Web Audio API for the podcast (Added mp3 clause)
+							if(self.filter && !self.mp3) {
 								self.WebAudioAPI.filter = self.context.createBiquadFilter();
 								// filter config set in applyGains()
 								self.WebAudioAPI.source.connect(self.WebAudioAPI.filter);
@@ -1201,7 +1212,7 @@ var PerceptiveMedia; // Global
 				wmode:'window',
 				swfPath:'assets/js/jplayer',
 				volume: self.fallbackNormalizer * Math.max(self.bufferGain, self.bufferFilterGain),
-				muted: !!self.context,
+				// muted: !!self.context, // Disabled Web Audio API for the podcast
 				loop: self.loop
 			});
 		},
@@ -1270,7 +1281,8 @@ var PerceptiveMedia; // Global
 				}
 				time = time !== undefined ? time : this.context.currentTime - this.startTime;
 
-				if(this.filter) {
+				// Disabled Web Audio API for the podcast (Added mp3 clause)
+				if(this.filter && !this.mp3) {
 					this.WebAudioAPI.filter.type = this.filter.type;
 					this.WebAudioAPI.filter.frequency.value = this.filter.frequency;
 					this.WebAudioAPI.filter.Q.value = this.filter.Q;
@@ -1279,11 +1291,13 @@ var PerceptiveMedia; // Global
 
 				this.WebAudioAPI.gainNode1.gain.cancelScheduledValues(0);
 				this.WebAudioAPI.gainNode1.gain.value = this.fader.length ? this.fader[0].bufferGain : this.bufferGain;
-				if(this.effectAsset) {
+				// Disabled Web Audio API for the podcast (Added mp3 clause)
+				if(this.effectAsset && !this.mp3) {
 					this.WebAudioAPI.gainNode2.gain.cancelScheduledValues(0);
 					this.WebAudioAPI.gainNode2.gain.value = this.fader.length ? this.fader[0].effectGain : this.effectGain;
 				}
-				if(this.filter) {
+				// Disabled Web Audio API for the podcast (Added mp3 clause)
+				if(this.filter && !this.mp3) {
 					this.WebAudioAPI.gainNode3.gain.cancelScheduledValues(0);
 					this.WebAudioAPI.gainNode3.gain.value = this.fader.length ? this.fader[0].bufferFilterGain : this.bufferFilterGain;
 					if(this.effectAsset) {
@@ -1292,34 +1306,37 @@ var PerceptiveMedia; // Global
 					}
 				}
 
-				for(var i = 0, len = this.fader.length; i < len; i++) {
-					var relFaderTime = this.fader[i].time - time;
-					// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : fader : ' + i + ' : relFaderTime = ' + relFaderTime + ' : asset.text: ' + this.text);
+				// Disabled Web Audio API for the podcast (Added mp3 if)
+				if(!this.mp3) {
+					for(var i = 0, len = this.fader.length; i < len; i++) {
+						var relFaderTime = this.fader[i].time - time;
+						// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : fader : ' + i + ' : relFaderTime = ' + relFaderTime + ' : asset.text: ' + this.text);
 
-					if(relFaderTime < 0) {
-						this.WebAudioAPI.gainNode1.gain.linearRampToValueAtTime(this.fader[i].bufferGain, this.context.currentTime);
-						if(this.effectAsset) {
-							this.WebAudioAPI.gainNode2.gain.linearRampToValueAtTime(this.fader[i].effectGain, this.context.currentTime);
-						}
-						if(this.filter) {
-							this.WebAudioAPI.gainNode3.gain.linearRampToValueAtTime(this.fader[i].bufferFilterGain, this.context.currentTime);
+						if(relFaderTime < 0) {
+							this.WebAudioAPI.gainNode1.gain.linearRampToValueAtTime(this.fader[i].bufferGain, this.context.currentTime);
 							if(this.effectAsset) {
-								this.WebAudioAPI.gainNode4.gain.linearRampToValueAtTime(this.fader[i].effectFilterGain, this.context.currentTime);
+								this.WebAudioAPI.gainNode2.gain.linearRampToValueAtTime(this.fader[i].effectGain, this.context.currentTime);
 							}
-						}
-						// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : fader : ' + i + ' : relFaderTime = ' + relFaderTime + ' : init linear : asset.text: ' + this.text);
-					} else {
-						this.WebAudioAPI.gainNode1.gain.linearRampToValueAtTime(this.fader[i].bufferGain, this.context.currentTime + relFaderTime);
-						if(this.effectAsset) {
-							this.WebAudioAPI.gainNode2.gain.linearRampToValueAtTime(this.fader[i].effectGain, this.context.currentTime + relFaderTime);
-						}
-						if(this.filter) {
-							this.WebAudioAPI.gainNode3.gain.linearRampToValueAtTime(this.fader[i].bufferFilterGain, this.context.currentTime + relFaderTime);
+							if(this.filter) {
+								this.WebAudioAPI.gainNode3.gain.linearRampToValueAtTime(this.fader[i].bufferFilterGain, this.context.currentTime);
+								if(this.effectAsset) {
+									this.WebAudioAPI.gainNode4.gain.linearRampToValueAtTime(this.fader[i].effectFilterGain, this.context.currentTime);
+								}
+							}
+							// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : fader : ' + i + ' : relFaderTime = ' + relFaderTime + ' : init linear : asset.text: ' + this.text);
+						} else {
+							this.WebAudioAPI.gainNode1.gain.linearRampToValueAtTime(this.fader[i].bufferGain, this.context.currentTime + relFaderTime);
 							if(this.effectAsset) {
-								this.WebAudioAPI.gainNode4.gain.linearRampToValueAtTime(this.fader[i].effectFilterGain, this.context.currentTime + relFaderTime);
+								this.WebAudioAPI.gainNode2.gain.linearRampToValueAtTime(this.fader[i].effectGain, this.context.currentTime + relFaderTime);
 							}
+							if(this.filter) {
+								this.WebAudioAPI.gainNode3.gain.linearRampToValueAtTime(this.fader[i].bufferFilterGain, this.context.currentTime + relFaderTime);
+								if(this.effectAsset) {
+									this.WebAudioAPI.gainNode4.gain.linearRampToValueAtTime(this.fader[i].effectFilterGain, this.context.currentTime + relFaderTime);
+								}
+							}
+							// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : fader : ' + i + ' : relFaderTime = ' + relFaderTime + ' : create linear : asset.text: ' + this.text);
 						}
-						// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : fader : ' + i + ' : relFaderTime = ' + relFaderTime + ' : create linear : asset.text: ' + this.text);
 					}
 				}
 			} else {
