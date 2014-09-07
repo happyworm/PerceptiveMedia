@@ -1073,12 +1073,12 @@ var PerceptiveMedia; // Global
 									grainOffset = self.loop ? (time - self.time) % (self.duration / 2) : -relTime,
 									grainDuration = self.loop ? (self.duration / 2) : self.duration + relTime;
 
-									self.WebAudioAPI.source.noteGrainOn(timeWhen, grainOffset, grainDuration); // NB: relTime would be negative here, so could just have 1st param as zero.
+									self.WebAudioAPI.source.start(timeWhen, grainOffset, grainDuration); // NB: relTime would be negative here, so could just have 1st param as zero.
 
 									// Give the event, as it was effectively played in the past when compared to this new start time.
 									$(self).trigger(PerceptiveMedia.prototype.event.playasset);
 
-									// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : noteGrainOn(' + timeWhen + ', ' + grainOffset + ', ' + grainDuration + ') : asset.text: ' + self.text);
+									// if(DEBUG) console.log('perceptive.media.js : [prepareMethodsWebAudioAPI] Asset.play() : start(' + timeWhen + ', ' + grainOffset + ', ' + grainDuration + ') : asset.text: ' + self.text);
 								}
 
 								if(self.loop) {
