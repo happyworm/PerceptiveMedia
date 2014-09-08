@@ -30,11 +30,8 @@ var initBreakingOut = (function($, undefined) {
 
 		var media_root = 'audio/';
 
-
-		// console.log('geoData:');
-		// console.dir(geoData);
-		// console.log('socialData:');
-		// console.dir(socialData);
+		console.log('geoData: %o', geoData);
+		console.log('socialData: %o', socialData);
 
 /*
 		// Docs for the geoData and socialData objects

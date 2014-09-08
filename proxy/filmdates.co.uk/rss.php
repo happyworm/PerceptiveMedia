@@ -29,6 +29,15 @@
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 	/*
+	 * Make the request look like an RSS reader
+	 */
+	$request_header = array(
+		'User-Agent: Mozilla',
+		'Accept: text/html,application/xml'
+	);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $request_header);
+
+	/*
 	 * Execute the cURL session
 	 */
 	$contents = curl_exec ($ch);
